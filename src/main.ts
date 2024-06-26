@@ -12,12 +12,15 @@ import { RouterModule, RouterOutlet, provideRouter } from '@angular/router';
 
 @Injectable()
 export class Service1 {
-  service2 = inject(Service2);
+  service2 = inject(ACTION_CONTEXT_SERVICE);
+  config = inject(CONFIG);
+
 }
 
 @Injectable()
 export class Service2 {
   service2 = inject(Service1);
+  config = inject(CONFIG);
 }
 
 @Component({
@@ -39,12 +42,18 @@ export class App {}
 })
 export class AppHello {
   service2 = inject(ACTION_CONTEXT_SERVICE);
+  config = inject(CONFIG);
   name = 'Angular';
 }
 
 export const ACTION_CONTEXT_SERVICE = new InjectionToken<any>(
   'ACTION_CONTEXT_SERVICE'
 );
+
+export const CONFIG = new InjectionToken<any>(
+  'CONFIG'
+);
+
 
 let c = [Service1,
   {
@@ -60,6 +69,10 @@ bootstrapApplication(App, {
         path: '',
         component: AppHello,
         providers: [
+        {
+          provide: CONFIG,
+          useValue: {hi: 'hello'},
+        },
          ...c 
         ],
       },
